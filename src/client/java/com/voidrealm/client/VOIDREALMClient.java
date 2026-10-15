@@ -18,8 +18,6 @@ public class VOIDREALMClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-
-		// Register the Phase 4 screen effect.
 		VoidBurstScreenEffects.register();
 
 		KeyMapping.Category category = KeyMapping.Category.register(
@@ -39,8 +37,7 @@ public class VOIDREALMClient implements ClientModInitializer {
 		final int[] lastShownSecond = {-1};
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-
-			// Update the screen flash and particle animation every tick.
+			// Update screen effects and particles every client tick.
 			VoidBurstScreenEffects.tick();
 			VoidBurstAnimation.tick(client);
 
@@ -50,7 +47,7 @@ public class VOIDREALMClient implements ClientModInitializer {
 				return;
 			}
 
-			// Show the remaining cooldown as an on-screen overlay.
+			// Update the cooldown overlay.
 			if (cooldownTicks[0] > 0) {
 				cooldownTicks[0]--;
 
@@ -78,8 +75,6 @@ public class VOIDREALMClient implements ClientModInitializer {
 			}
 
 			while (voidBurstKey.consumeClick()) {
-
-				// Stop activation while the cooldown is running.
 				if (cooldownTicks[0] > 0) {
 					int secondsLeft = (cooldownTicks[0]
 							+ TICKS_PER_SECOND - 1) / TICKS_PER_SECOND;
@@ -93,7 +88,6 @@ public class VOIDREALMClient implements ClientModInitializer {
 					continue;
 				}
 
-				// Make sure the server supports the ability payload.
 				if (!ClientPlayNetworking.canSend(VoidBurstPayload.TYPE)) {
 					client.player.sendSystemMessage(
 							Component.literal(
@@ -103,10 +97,9 @@ public class VOIDREALMClient implements ClientModInitializer {
 					continue;
 				}
 
-				// Ask the server to perform the attack.
+				// The server remains responsible for the actual attack.
 				ClientPlayNetworking.send(new VoidBurstPayload());
 
-				// Start the local cooldown.
 				cooldownTicks[0] = COOLDOWN_TICKS;
 				lastShownSecond[0] = -1;
 
@@ -114,7 +107,7 @@ public class VOIDREALMClient implements ClientModInitializer {
 						Component.literal("§5✦ VOID BURST ACTIVATED! ✦")
 				);
 
-				// Start the complete timed animation sequence.
+				// Starts the particles and cinematic framing together.
 				VoidBurstAnimation.start(
 						client.player.getX(),
 						client.player.getY(),
