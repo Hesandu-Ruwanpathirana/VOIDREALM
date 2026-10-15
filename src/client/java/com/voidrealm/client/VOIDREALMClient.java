@@ -42,7 +42,7 @@ public class VOIDREALMClient implements ClientModInitializer {
 				return;
 			}
 
-			// Countdown displayed in chat.
+			// Show the remaining cooldown as an on-screen overlay.
 			if (cooldownTicks[0] > 0) {
 				cooldownTicks[0]--;
 
@@ -53,14 +53,14 @@ public class VOIDREALMClient implements ClientModInitializer {
 					lastShownSecond[0] = secondsLeft;
 
 					if (secondsLeft > 0) {
-						client.player.sendSystemMessage(
+						client.player.sendOverlayMessage(
 								Component.literal(
 										"§5✦ VOID BURST RECHARGING: §d"
 												+ secondsLeft + "s"
 								)
 						);
 					} else {
-						client.player.sendSystemMessage(
+						client.player.sendOverlayMessage(
 								Component.literal(
 										"§a✦ VOID BURST READY! Press G"
 								)
@@ -92,7 +92,7 @@ public class VOIDREALMClient implements ClientModInitializer {
 					continue;
 				}
 
-				// Request the server-side attack.
+				// Ask the server to perform the attack.
 				ClientPlayNetworking.send(new VoidBurstPayload());
 
 				cooldownTicks[0] = COOLDOWN_TICKS;
@@ -106,7 +106,7 @@ public class VOIDREALMClient implements ClientModInitializer {
 				double cy = client.player.getY();
 				double cz = client.player.getZ();
 
-				// Three large purple portal rings.
+				// Three large rings of purple portal energy.
 				double[] radii = {2.5, 4.5, 7.0};
 
 				for (int ring = 0; ring < radii.length; ring++) {
@@ -148,7 +148,7 @@ public class VOIDREALMClient implements ClientModInitializer {
 					);
 				}
 
-				// Dense central portal burst.
+				// Dense central burst.
 				for (int i = 0; i < 200; i++) {
 					double angle = Math.PI * 2.0 * i / 200.0;
 					double speed = 0.15 + (i % 10) * 0.08;
