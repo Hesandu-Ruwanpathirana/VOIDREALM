@@ -18,6 +18,10 @@ public class VOIDREALMClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+
+		// Register the Phase 4 screen effect.
+		VoidBurstScreenEffects.register();
+
 		KeyMapping.Category category = KeyMapping.Category.register(
 				VOIDREALM.id("powers")
 		);
@@ -36,7 +40,8 @@ public class VOIDREALMClient implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 
-			// Keep the Phase 3 animation moving every client tick.
+			// Update the screen flash and particle animation every tick.
+			VoidBurstScreenEffects.tick();
 			VoidBurstAnimation.tick(client);
 
 			if (client.player == null || client.level == null) {
@@ -109,8 +114,7 @@ public class VOIDREALMClient implements ClientModInitializer {
 						Component.literal("§5✦ VOID BURST ACTIVATED! ✦")
 				);
 
-				// PHASE 3: Start the timed animation sequence.
-				// Charge-up -> vortex -> shockwave -> fading sparks.
+				// Start the complete timed animation sequence.
 				VoidBurstAnimation.start(
 						client.player.getX(),
 						client.player.getY(),

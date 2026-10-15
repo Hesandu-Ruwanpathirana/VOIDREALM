@@ -128,8 +128,13 @@ public final class VoidBurstAnimation {
         }
 
         // PHASE 3: REALITY BREAK (ticks 36-56)
-        // A fast-growing circular shockwave spreads across the ground.
+        // The flash begins as the expanding shockwave is released.
         else if (animationTick <= 56) {
+
+            if (animationTick == 36) {
+                VoidBurstScreenEffects.triggerRealityFlash();
+            }
+
             double progress = (animationTick - 35) / 21.0;
             double radius = progress * 7.0;
             int points = 36;
